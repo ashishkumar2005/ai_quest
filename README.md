@@ -1,6 +1,6 @@
 # AI Quest
 
-AI Quest is a mobile-first Class 10 Artificial Intelligence learning platform built with Next.js App Router, TypeScript, Tailwind CSS, Supabase and Cloudflare Stream. The current course includes exactly seven units, 28 demo lessons and seven starter quizzes. Each unit has one independent notes-PDF slot.
+AI Quest is a mobile-first Class 10 Artificial Intelligence learning platform built with Next.js App Router, TypeScript, Tailwind CSS and Supabase. The current course includes exactly seven units, 28 demo lessons and seven starter quizzes. Each unit has one independent notes-PDF slot.
 
 The project includes a browser-local demo mode for student data. Admin access is always protected by a server-checked password and a signed, HTTP-only session cookie. Connect Supabase to enable shared accounts, RLS-protected content, persistent progress and private resource storage.
 
@@ -13,7 +13,7 @@ The project includes a browser-local demo mode for student data. Admin access is
 - Admin portal for unit and lesson editing, lesson ordering, video IDs, unit notes PDFs, CBSE sample papers, quiz questions, announcements, suggestions and student profiles
 - Supabase email/password authentication, a password-protected admin portal, optional admin-role enforcement and a database profile trigger
 - Supabase SQL migrations with Row Level Security, private storage policies and server-scored quiz RPCs that keep answer keys out of student table access
-- Cloudflare Stream signed playback-token endpoint; MP4 files are not stored in the source repository
+- Private Supabase Storage for lesson videos, PDFs and course images, with signed playback links
 - Vercel-compatible Next.js production scripts
 
 ## Local preview
@@ -45,7 +45,7 @@ npm run start
 ## Supabase setup
 
 1. Create a Supabase project.
-2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, then `supabase/migrations/202609260002_seed_quizzes.sql`.
+2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, `supabase/migrations/202609260002_seed_quizzes.sql`, then `supabase/migrations/202609290001_supabase_video_storage.sql`.
 3. In **Project Settings → API**, copy the project URL and publishable/anon key into `.env.local` using the names in `.env.example`.
 4. In **Authentication → Providers**, enable Email and Password. Configure email confirmation and password rules to suit your school’s account policy.
 5. Create the first account through `/login`. The signup metadata creates a student profile. Promote a trusted account to admin from the Supabase SQL editor:
@@ -70,17 +70,17 @@ For local development, add both values to the ignored `.env.local` file. Keep th
 
 - **Unit PDFs:** Admin portal → Unit notes PDFs. Choose the unit, add PDF metadata and upload one primary PDF. Replacing the file updates that unit’s slot; publishing controls student visibility.
 - **CBSE sample papers:** Admin portal → Sample papers. Add a title, academic session, paper type, description and PDF. Students see published papers only.
-- **Videos:** Upload source videos directly to Cloudflare Stream. Copy the Stream video UID into that lesson’s Cloudflare Stream video ID field under Units & lessons. Keep the Cloudflare account ID, customer code and API token in server-only environment variables. The app requests short-lived signed playback tokens after checking the logged-in student and published lesson.
+- **Videos:** In Admin portal → Units & lessons, choose a lesson and upload an MP4 or WebM video up to 50 MB. Select **Save course changes** after upload. Video files are stored in the private `course-resources` bucket; students receive signed playback links only for published lessons.
 - **Unit illustrations:** The seven original SVG illustrations are in `public/images`. Admins can replace a unit illustration in the CMS. Supabase-backed replacement images are stored in the private `course-resources` bucket.
 
-The Cloudflare Stream API token should have only the account-level Stream permissions needed to mint playback tokens. Keep the Stream source upload in Cloudflare; do not commit video files to GitHub. Signed playback discourages direct downloads, but no web player can prevent screen recording.
+Supabase Storage does not transcode videos or provide adaptive-bitrate streaming. Use browser-compatible MP4 (H.264/AAC) or WebM files. Do not commit video files to GitHub. Signed playback links expire after one hour; no web player can prevent screen recording.
 
 ## Vercel deployment
 
 1. Push this project to a GitHub repository.
 2. In Vercel, choose **Add New → Project** and import the repository.
 3. Use the default Next.js framework preset and root directory `.`.
-4. Add the variables from `.env.example` under **Project Settings → Environment Variables**. Set the Supabase URL and anon/publishable key for Preview and Production. Add the three Cloudflare variables when Stream videos are configured.
+4. Add the variables from `.env.example` under **Project Settings → Environment Variables**. Set the Supabase URL and anon/publishable key for Preview and Production.
 5. Deploy. Vercel runs `npm install` and `npm run build`; no separate server is required.
 6. Add the deployed Vercel URL to Supabase **Authentication → URL Configuration → Site URL** and the allowed redirect URLs.
 7. Create the first admin account, then promote it with the SQL statement above.
@@ -93,9 +93,6 @@ The Cloudflare Stream API token should have only the account-level Stream permis
 | `ADMIN_SESSION_SECRET` | Server-side session signing | Required; 32+ random characters |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase browser and server clients | For shared auth and data |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase browser and server clients; subject to RLS | For shared auth and data |
-| `CLOUDFLARE_ACCOUNT_ID` | Server route that requests signed playback | For video playback |
-| `CLOUDFLARE_STREAM_CUSTOMER_CODE` | Server-generated Stream embed URL | For video playback |
-| `CLOUDFLARE_STREAM_API_TOKEN` | Server-only Cloudflare token request | For video playback |
 
 ## Structure
 
