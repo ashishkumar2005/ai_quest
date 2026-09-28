@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { ArrowLeft, Compass } from "lucide-react";
+export default function NotFound(){return <main className="grid min-h-screen place-items-center p-5"><div className="card max-w-md p-9 text-center"><span className="mx-auto grid size-12 place-items-center rounded-2xl bg-indigo-50 text-indigo-600"><Compass size={22}/></span><div className="eyebrow mt-5">404 · PAGE NOT FOUND</div><h1 className="mt-2 text-2xl font-bold">We can’t find that page</h1><p className="body-muted mt-2 text-xs">The link may be out of date, or the page has moved.</p><Link href="/" className="btn-primary mt-5"><ArrowLeft size={14}/>Back to AI Quest</Link></div></main>}

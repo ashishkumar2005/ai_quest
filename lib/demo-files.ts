@@ -1,0 +1,7 @@
+"use client";
+
+const DATABASE="ai-quest-demo-files";const STORE="files";const urls=new Map<string,string>();
+function openDb(){return new Promise<IDBDatabase>((resolve,reject)=>{const request=indexedDB.open(DATABASE,1);request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(STORE))request.result.createObjectStore(STORE)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)})}
+export async function saveDemoFile(id:string,file:Blob){const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).put(file,id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});db.close()}
+export async function demoFileUrl(id:string){const existing=urls.get(id);if(existing)return existing;const db=await openDb();const file=await new Promise<Blob|undefined>((resolve,reject)=>{const request=db.transaction(STORE,"readonly").objectStore(STORE).get(id);request.onsuccess=()=>resolve(request.result as Blob|undefined);request.onerror=()=>reject(request.error)});db.close();if(!file)return undefined;const url=URL.createObjectURL(file);urls.set(id,url);return url}
+export async function removeDemoFile(id:string){const existing=urls.get(id);if(existing){URL.revokeObjectURL(existing);urls.delete(id)}const db=await openDb();await new Promise<void>((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});db.close()}

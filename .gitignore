@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.vercel/
+.pnpm-cache/
+.env*
+!.env.example
+*.log
+*.tsbuildinfo
+
+.vercel
+.env*
