@@ -45,7 +45,16 @@ export async function POST(request: NextRequest) {
   const uploadURL = payload?.result?.uploadURL;
   const uid = payload?.result?.uid;
   if (!response.ok || !uploadURL || !uid) {
-    return NextResponse.json({ error: "Cloudflare could not prepare this upload. Please try again." }, { status: 502 });
+    const details = Array.isArray(payload?.errors)
+      ? payload.errors.map((error: { code?: unknown; message?: unknown }) => {
+          const code = typeof error.code === "number" ? `code ${error.code}` : "";
+          const message = typeof error.message === "string" ? error.message : "";
+          return [code, message].filter(Boolean).join(": ");
+        }).filter(Boolean).join("; ")
+      : "";
+    const reason = details || `HTTP ${response.status}`;
+    console.error(`Cloudflare Stream direct upload failed (${response.status}): ${reason}`);
+    return NextResponse.json({ error: `Cloudflare rejected the upload (${response.status}): ${reason}` }, { status: 502 });
   }
 
   return NextResponse.json({ uploadURL, uid }, { headers: { "Cache-Control": "private, no-store, max-age=0" } });
