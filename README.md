@@ -45,7 +45,7 @@ npm run start
 ## Supabase setup
 
 1. Create a Supabase project.
-2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, `supabase/migrations/202609260002_seed_quizzes.sql`, then `supabase/migrations/202609290001_supabase_video_storage.sql`.
+2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, `supabase/migrations/202609260002_seed_quizzes.sql`, `supabase/migrations/202609290001_supabase_video_storage.sql`, then `supabase/migrations/202609290002_allow_lesson_video_uploads.sql`. Apply the last migration to existing projects too; it enables MP4/WebM MIME types on the `course-resources` bucket.
 3. In **Project Settings → API**, copy the project URL and publishable/anon key into `.env.local` using the names in `.env.example`.
 4. In **Authentication → Providers**, enable Email and Password. Configure email confirmation and password rules to suit your school’s account policy.
 5. Create the first account through `/login`. The signup metadata creates a student profile. Promote a trusted account to admin from the Supabase SQL editor:
