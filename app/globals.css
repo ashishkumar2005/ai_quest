@@ -86,7 +86,7 @@ button { cursor: pointer; }
   .app-main { margin-left: 0; }
   .topbar { height: 62px; padding: 0 17px; }
   .content { padding: 25px 17px 100px; }
-  .mobile-bottom { position: fixed; display: grid; grid-template-columns: repeat(6,1fr); inset: auto 0 0; height: 72px; background: rgba(255,255,255,.97); border-top: 1px solid var(--line); z-index: 25; padding: 8px 6px max(8px, env(safe-area-inset-bottom)); backdrop-filter: blur(10px); }
+  .mobile-bottom { position: fixed; display: grid; grid-template-columns: repeat(7,1fr); inset: auto 0 0; height: 72px; background: rgba(255,255,255,.97); border-top: 1px solid var(--line); z-index: 25; padding: 8px 6px max(8px, env(safe-area-inset-bottom)); backdrop-filter: blur(10px); }
   .mobile-nav-link { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8a94a8; font-size: 10px; font-weight: 650; }
   .mobile-nav-link.active { color: var(--blue); }
   .search-panel { right: 10px; top: 56px; }

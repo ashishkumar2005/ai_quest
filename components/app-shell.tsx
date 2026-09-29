@@ -10,9 +10,9 @@ import { useCourseUnits } from "@/lib/hooks";
 import { BrandMark } from "@/components/brand-mark";
 
 const desktopNav = [
-  { label: "Home", href: "/dashboard", icon: House }, { label: "Units", href: "/units", icon: BookOpen }, { label: "CBSE Sample Papers", href: "/papers", icon: FileText }, { label: "Quizzes", href: "/quizzes", icon: CircleHelp }, { label: "Progress", href: "/progress", icon: ChartNoAxesColumnIncreasing }, { label: "Suggestions", href: "/suggestions", icon: MessageSquareText }, { label: "Profile", href: "/profile", icon: UserRound },
+  { label: "Home", href: "/dashboard", icon: House }, { label: "Units", href: "/units", icon: BookOpen }, { label: "CBSE Sample Papers", href: "/papers", icon: FileText }, { label: "Quizzes", href: "/quizzes", icon: CircleHelp }, { label: "Progress", href: "/progress", icon: ChartNoAxesColumnIncreasing }, { label: "Messages", href: "/suggestions", icon: MessageSquareText }, { label: "Profile", href: "/profile", icon: UserRound },
 ];
-const mobileNav = [{ label: "Home", href: "/dashboard", icon: House }, { label: "Units", href: "/units", icon: BookOpen }, { label: "Papers", href: "/papers", icon: FileText }, { label: "Progress", href: "/progress", icon: ChartNoAxesColumnIncreasing }, { label: "Profile", href: "/profile", icon: UserRound }, { label: "Admin", href: "/admin", icon: Settings2 }];
+const mobileNav = [{ label: "Home", href: "/dashboard", icon: House }, { label: "Units", href: "/units", icon: BookOpen }, { label: "Papers", href: "/papers", icon: FileText }, { label: "Progress", href: "/progress", icon: ChartNoAxesColumnIncreasing }, { label: "Message", href: "/suggestions", icon: MessageSquareText }, { label: "Profile", href: "/profile", icon: UserRound }, { label: "Admin", href: "/admin", icon: Settings2 }];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       <main className="content">{children}</main>
-      <footer className="border-t border-slate-100 px-5 py-4 text-center text-[10px] text-slate-400">Made with love by Aivora</footer>
+      <footer className="border-t border-slate-100 px-5 py-4 text-center text-[10px] text-slate-400">Made with <span aria-hidden className="text-rose-400">♥</span> by Aivora</footer>
     </div>
     <nav className="mobile-bottom" aria-label="Mobile navigation">{mobileNav.map(({ label, href, icon: Icon }) => <Link href={href} key={href} className={`mobile-nav-link ${isActive(href) ? "active" : ""}`}><Icon size={19}/><span>{label}</span></Link>)}</nav>
   </div>;
