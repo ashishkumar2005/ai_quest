@@ -45,7 +45,7 @@ npm run start
 ## Supabase setup
 
 1. Create a Supabase project.
-2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, `supabase/migrations/202609260002_seed_quizzes.sql`, `supabase/migrations/202609290001_supabase_video_storage.sql`, then `supabase/migrations/202609290002_allow_lesson_video_uploads.sql`. Apply the last migration to existing projects too; it enables MP4/WebM MIME types on the `course-resources` bucket.
+2. In the Supabase SQL editor, apply `supabase/migrations/202609260001_initial_schema.sql`, `supabase/migrations/202609260002_seed_quizzes.sql`, `supabase/migrations/202609290001_supabase_video_storage.sql`, `supabase/migrations/202609290002_allow_lesson_video_uploads.sql`, then `supabase/migrations/202609290003_unit_presentations.sql`. Apply migrations `202609290002` and `202609290003` to existing projects too; they enable video and PowerPoint MIME types on the `course-resources` bucket.
 3. In **Project Settings → API**, copy the project URL and publishable/anon key into `.env.local` using the names in `.env.example`.
 4. In **Authentication → Providers**, enable Email and Password. Configure email confirmation and password rules to suit your school’s account policy.
 5. Create the first account through `/login`. The signup metadata creates a student profile. Promote a trusted account to admin from the Supabase SQL editor:
@@ -69,6 +69,7 @@ The migration seeds the Class 10 course, its seven units, 28 lessons and a publi
 For local development, add both values to the ignored `.env.local` file. Keep the password private and use a cryptographically random signing secret with at least 32 characters. For Vercel, add both as server-side environment variables for Preview and Production, then redeploy. Do not use a `NEXT_PUBLIC_` prefix for either value.
 
 - **Unit PDFs:** Admin portal → Unit notes PDFs. Choose the unit, add PDF metadata and upload one primary PDF. Replacing the file updates that unit’s slot; publishing controls student visibility.
+- **Unit presentations:** Admin portal → Unit presentations. Upload one `.ppt` or `.pptx` deck per unit (up to 50 MB), set its title and publish it for students. Published decks appear as a download in that unit.
 - **CBSE sample papers:** Admin portal → Sample papers. Add a title, academic session, paper type, description and PDF. Students see published papers only.
 - **Videos:** In Admin portal → Units & lessons, choose a lesson and upload an MP4 or WebM video up to 50 MB. Select **Save course changes** after upload. Video files are stored in the private `course-resources` bucket; students receive signed playback links only for published lessons.
 - **Unit illustrations:** The seven original SVG illustrations are in `public/images`. Admins can replace a unit illustration in the CMS. Supabase-backed replacement images are stored in the private `course-resources` bucket.
